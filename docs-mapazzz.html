@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação API - Sistema de Detecção de Zonas de Risco de Malária</title>
+    <style>
+        :root {
+            --primary-color: #2c8c99;
+            --secondary-color: #116466;
+            --accent-color: #ffcb9a;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --code-bg: #f1f1f1;
+            --border-color: #ddd;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-image: linear-gradient(to right,  
+                            rgba(214, 161, 169, 0.85), 
+                            rgba(17, 100, 102, 0.85)),
+                            url('./images/malaria-map-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Efeito parallax */
+            color: white;
+            padding: 3rem 2rem; /* Aumentei um pouco o padding vertical */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Opcional: Adicionar um sutil efeito de sombra no texto para garantir legibilidade */
+        header h1, header p {
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            font-weight: 300;
+            margin-top: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        nav {
+            background-color: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 1.5rem;
+        }
+        
+        code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .endpoint {
+            background-color: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            padding: 1rem;
+            background-color: rgba(44, 140, 153, 0.1);
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+        
+        .method {
+            font-weight: bold;
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            margin-right: 1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .get {
+            background-color: #61affe;
+            color: white;
+        }
+        
+        .post {
+            background-color: #49cc90;
+            color: white;
+        }
+        
+        .put {
+            background-color: #fca130;
+            color: white;
+        }
+        
+        .delete {
+            background-color: #f93e3e;
+            color: white;
+        }
+        
+        .endpoint-content {
+            padding: 1rem;
+        }
+        
+        .parameter-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .parameter-table th, .parameter-table td {
+            padding: 0.7rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .parameter-table th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+        }
+        
+        .required {
+            color: #f93e3e;
+            font-weight: bold;
+        }
+        
+        .optional {
+            color: #0d5aa7;
+        }
+        
+        .response-example {
+            background-color: #263238;
+            color: #eeffff;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        
+        .response-code {
+            color: #c3e88d;
+        }
+        
+        .string {
+            color: #c3e88d;
+        }
+        
+        .number {
+            color: #f78c6c;
+        }
+        
+        .boolean {
+            color: #ff9cac;
+        }
+        
+        .null {
+            color: #c792ea;
+        }
+        
+        .key {
+            color: #82aaff;
+        }
+        
+        footer {
+            background-color: var(--light-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-info {
+            background-color: rgba(97, 175, 254, 0.1);
+            border-left: 4px solid #61affe;
+        }
+        
+        .alert-warning {
+            background-color: rgba(252, 161, 48, 0.1);
+            border-left: 4px solid #fca130;
+        }
+        
+        .topic-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .topic-link {
+            background-color: var(--light-bg);
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .topic-link:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .method {
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">MapaZZZ API</a>
+            <div class="nav-links">
+                <a href="#introducao">Introdução</a>
+                <a href="#autenticacao">Autenticação</a>
+                <a href="#endpoints">Endpoints</a>
+                <a href="#codigos">Códigos de Resposta</a>
+                <a href="#exemplos">Exemplos</a>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <h1>API de Detecção de Zonas de Risco de Malária - MapaZZZ</h1>
+        <p class="subtitle">Documentação completa para integração e utilização dos serviços</p>
+    </header>
+
+    <div class="container">
+        <div class="topic-links">
+            <a href="#mapas-risco" class="topic-link">Mapas de Risco</a>
+            <a href="#dados-clima" class="topic-link">Dados Climáticos</a>
+            <a href="#casos-notificados" class="topic-link">Casos Notificados</a>
+            <a href="#previsoes" class="topic-link">Previsões</a>
+            <a href="#alertas" class="topic-link">Sistema de Alertas</a>
+        </div>
+
+        <section id="introducao">
+            <h2>Introdução</h2>
+            <div class="card">
+                <p>Bem-vindo à documentação da API do Sistema de Detecção de Zonas de Risco de Malária. Esta API fornece acesso a dados geoespaciais, análises preditivas e informações em tempo real sobre áreas com risco de transmissão de malária.</p>
+                
+                <p>Com esta API, você pode:</p>
+                <ul>
+                    <li>Acessar mapas de calor de risco de malária por região</li>
+                    <li>Obter dados históricos e atuais de casos notificados</li>
+                    <li>Consultar dados climáticos correlacionados com a incidência de malária</li>
+                    <li>Receber previsões de surtos com base em modelos de aprendizado de máquina</li>
+                    <li>Configurar e gerenciar alertas para áreas específicas</li>
+                </ul>
+                
+                <div class="alert alert-info">
+                    <strong>Nota:</strong> Esta API é atualizada diariamente com dados de fontes oficiais de saúde e meteorologia.
+                </div>
+            </div>
+        </section>
+
+        <section id="autenticacao">
+            <h2>Autenticação</h2>
+            <div class="card">
+                <p>Todas as requisições à API requerem autenticação usando uma chave de API (API Key). Para obter sua chave, entre em contato com nossa equipe de suporte.</p>
+
+                <h3>Autenticação via Header</h3>
+                <p>Inclua sua chave de API no cabeçalho HTTP <code>X-API-Key</code>:</p>
+                <pre>X-API-Key: sua_chave_api_aqui</pre>
+
+                <h3>Autenticação via Query Parameter</h3>
+                <p>Alternativamente, você pode incluir sua chave como parâmetro de consulta:</p>
+                <pre>https://api.malariarisk.com/v1/risk-zones?apiKey=sua_chave_api_aqui</pre>
+
+                <div class="alert alert-warning">
+                    <strong>Importante:</strong> Mantenha sua chave de API segura. Não compartilhe ou exponha sua chave em repositórios públicos ou código-fonte cliente.
+                </div>
+            </div>
+        </section>
+
+        <section id="endpoints">
+            <h2>Endpoints</h2>
+
+            <div id="mapas-risco">
+                <h3>Mapas de Risco</h3>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <code>/v1/risk-zones</code>
+                    </div>
+                    <div class="endpoint-content">
+                        <p>Retorna um mapa de zonas de risco de malária com base em coordenadas geográficas.</p>
+                        
+                        <h4>Parâmetros de Consulta</h4>
+                        <table class="parameter-table">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Obrigatório</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>latitude</td>
+                                    <td>Number</td>
+                                    <td class="required">Sim</td>
+                                    <td>Latitude do ponto central da busca</td>
+                                </tr>
+                                <tr>
+                                    <td>longitude</td>
+                                    <td>Number</td>
+                                    <td class="required">Sim</td>
+                                    <td>Longitude do ponto central da busca</td>
+                                </tr>
+                                <tr>
+                                    <td>radius</td>
+                                    <td>Number</td>
+                                    <td class="optional">Não</td>
+                                    <td>Raio de busca em quilômetros (padrão: 10)</td>
+                                </tr>
+                                <tr>
+                                    <td>resolution</td>
+                                    <td>String</td>
+                                    <td class="optional">Não</td>
+                                    <td>Resolução do mapa: "high", "medium", "low" (padrão: "medium")</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Exemplo de Resposta</h4>
+                        <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+  <span class="key">"status"</span>: <span class="string">"success"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"center"</span>: {
+      <span class="key">"latitude"</span>: <span class="number">-3.1190</span>,
+      <span class="key">"longitude"</span>: <span class="number">-60.0217</span>
+    },
+    <span class="key">"radius"</span>: <span class="number">10</span>,
+    <span class="key">"resolution"</span>: <span class="string">"medium"</span>,
+    <span class="key">"riskZones"</span>: [
+      {
+        <span class="key">"id"</span>: <span class="string">"zone-123"</span>,
+        <span class="key">"riskLevel"</span>: <span class="string">"high"</span>,
+        <span class="key">"coordinates"</span>: [
+          {
+            <span class="key">"latitude"</span>: <span class="number">-3.1150</span>,
+            <span class="key">"longitude"</span>: <span class="number">-60.0250</span>
+          },
+          // ... mais coordenadas formando o polígono
+        ],
+        <span class="key">"caseCount"</span>: <span class="number">126</span>,
+        <span class="key">"lastUpdated"</span>: <span class="string">"2025-04-15T10:30:00Z"</span>
+      },
+      // ... mais zonas de risco
+    ]
+  }
+}</pre>
+                    </div>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <code>/v1/risk-zones/{regionId}</code>
+                    </div>
+                    <div class="endpoint-content">
+                        <p>Retorna informações detalhadas sobre uma região específica.</p>
+                        
+                        <h4>Parâmetros de Caminho</h4>
+                        <table class="parameter-table">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>regionId</td>
+                                    <td>String</td>
+                                    <td>ID único da região a ser consultada</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Exemplo de Resposta</h4>
+                        <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+  <span class="key">"status"</span>: <span class="string">"success"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="string">"region-456"</span>,
+    <span class="key">"name"</span>: <span class="string">"Zona Leste de Manaus"</span>,
+    <span class="key">"riskLevel"</span>: <span class="string">"high"</span>,
+    <span class="key">"boundaries"</span>: {
+      <span class="key">"type"</span>: <span class="string">"Polygon"</span>,
+      <span class="key">"coordinates"</span>: [
+        // Array de coordenadas definindo o polígono da região
+      ]
+    },
+    <span class="key">"statistics"</span>: {
+      <span class="key">"totalCases"</span>: <span class="number">287</span>,
+      <span class="key">"activeCases"</span>: <span class="number">42</span>,
+      <span class="key">"riskFactors"</span>: {
+        <span class="key">"waterBodies"</span>: <span class="number">12</span>,
+        <span class="key">"vegetationDensity"</span>: <span class="string">"high"</span>,
+        <span class="key">"rainfall"</span>: <span class="string">"above_average"</span>
+      }
+    },
+    <span class="key">"lastUpdated"</span>: <span class="string">"2025-04-16T14:20:00Z"</span>
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dados-clima">
+                <h3>Dados Climáticos</h3>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <code>/v1/climate-data</code>
+                    </div>
+                    <div class="endpoint-content">
+                        <p>Retorna dados climáticos relevantes para a propagação da malária em uma área específica.</p>
+                        
+                        <h4>Parâmetros de Consulta</h4>
+                        <table class="parameter-table">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Obrigatório</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>latitude</td>
+                                    <td>Number</td>
+                                    <td class="required">Sim</td>
+                                    <td>Latitude do ponto de interesse</td>
+                                </tr>
+                                <tr>
+                                    <td>longitude</td>
+                                    <td>Number</td>
+                                    <td class="required">Sim</td>
+                                    <td>Longitude do ponto de interesse</td>
+                                </tr>
+                                <tr>
+                                    <td>startDate</td>
+                                    <td>String (ISO)</td>
+                                    <td class="optional">Não</td>
+                                    <td>Data inicial para dados históricos (formato: YYYY-MM-DD)</td>
+                                </tr>
+                                <tr>
+                                    <td>endDate</td>
+                                    <td>String (ISO)</td>
+                                    <td class="optional">Não</td>
+                                    <td>Data final para dados históricos (formato: YYYY-MM-DD)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Exemplo de Resposta</h4>
+                        <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+  <span class="key">"status"</span>: <span class="string">"success"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"location"</span>: {
+      <span class="key">"latitude"</span>: <span class="number">-3.1190</span>,
+      <span class="key">"longitude"</span>: <span class="number">-60.0217</span>,
+      <span class="key">"name"</span>: <span class="string">"Manaus, AM"</span>
+    },
+    <span class="key">"timeRange"</span>: {
+      <span class="key">"start"</span>: <span class="string">"2025-03-01"</span>,
+      <span class="key">"end"</span>: <span class="string">"2025-04-15"</span>
+    },
+    <span class="key">"climate"</span>: [
+      {
+        <span class="key">"date"</span>: <span class="string">"2025-03-01"</span>,
+        <span class="key">"temperature"</span>: {
+          <span class="key">"min"</span>: <span class="number">24.3</span>,
+          <span class="key">"max"</span>: <span class="number">32.8</span>,
+          <span class="key">"avg"</span>: <span class="number">28.5</span>
+        },
+        <span class="key">"humidity"</span>: <span class="number">87</span>,
+        <span class="key">"rainfall"</span>: <span class="number">12.4</span>,
+        <span class="key">"malariaRiskIndex"</span>: <span class="number">0.78</span>
+      },
+      // ... mais registros diários
+    ],
+    <span class="key">"analysis"</span>: {
+      <span class="key">"averageTemperature"</span>: <span class="number">28.2</span>,
+      <span class="key">"averageHumidity"</span>: <span class="number">85</span>,
+      <span class="key">"totalRainfall"</span>: <span class="number">245.7</span>,
+      <span class="key">"malariaRiskCorrelation"</span>: <span class="number">0.82</span>,
+      <span class="key">"riskTrend"</span>: <span class="string">"increasing"</span>
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <div id="casos-notificados">
+                <h3>Casos Notificados</h3>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <code>/v1/cases</code>
+                    </div>
+                    <div class="endpoint-content">
+                        <p>Retorna dados sobre casos de malária notificados em uma área específica.</p>
+                        
+                        <h4>Parâmetros de Consulta</h4>
+                        <table class="parameter-table">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Tipo</th>
+                                    <th>Obrigatório</th>
+                                    <th>Descrição</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>regionId</td>
+                                    <td>String</td>
+                                    <td class="optional">Não</td>
+                                    <td>ID da região para filtrar casos</td>
+                                </tr>
+                                <tr>
+                                    <td>startDate</td>
+                                    <td>String (ISO)</td>
+                                    <td class="optional">Não</td>
+                                    <td>Data inicial para casos (formato: YYYY-MM-DD)</td>
+                                </tr>
+                                <tr>
+                                    <td>endDate</td>
+                                    <td>String (ISO)</td>
+                                    <td class="optional">Não</td>
+                                    <td>Data final para casos (formato: YYYY-MM-DD)</td>
+                                </tr>
+                                <tr>
+                                    <td>page</td>
+                                    <td>Number</td>
+                                    <td class="optional">Não</td>
+                                    <td>Número da página para paginação (padrão: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td>limit</td>
+                                    <td>Number</td>
+                                    <td class="optional">Não</td>
+                                    <td>Número de resultados por página (padrão: 50, máximo: 100)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Exemplo de Resposta</h4>
+                        <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+  <span class="key">"status"</span>: <span class="string">"success"</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"totalCases"</span>: <span class="number">342</span>,
+    <span class="key">"page"</span>: <span class="number">1</span>,
+    <span class="key">"limit"</span>: <span class="number">50</span>,
+    <span class="key">"totalPages"</span>: <span class="number">7</span>,
+    <span class="key">"cases"</span>: [
+      {
+        <span class="key">"id"</span>: <span class="string">"case-789"</span>,
+        <span class="key">"reportDate"</span>: <span class="string">"2025-04-10T09:15:00Z"</span>,
+        <span class="key">"location"</span>: {
+          <span class="key">"regionId"</span>: <span class="string">"region-456"</span>,
+          <span class="key">"coordinates"</span>: {
+            <span class="key">"latitude"</span>: <span class="number">-3.1165</span>,
+            <span class="key">"longitude"</span>: <span class="number">-60.0234</span>
+          }
+        },
+        <span class="key">"parasiteType"</span>: <span class="string">"P. vivax"</span>,
+        <span class="key">"patientData"</span>: {
+          <span class="key">"ageGroup"</span>: <span class="string">"18-30"</span>,
+          <span class="key">"gender"</span>: <span class="string">"F"</span>
+        },
+        <span class="key">"status"</span>: <span class="string">"confirmed"</span>
+      },
+      // ... mais casos
+    ],
+    <span class="key">"summary"</span>: {
+      <span class="key">"byParasiteType"</span>: {
+        <span class="key">"P. vivax"</span>: <span class="number">267</span>,
+        <span class="key">"P. falciparum"</span>: <span class="number">68</span>,
+        <span class="key">"Mixed"</span>: <span class="number">7</span>
+      },
+      <span class="key">"byAgeGroup"</span>: {
+        <span class="key">"0-5"</span>: <span class="number">24</span>,
+        <span class="key">"6-17"</span>: <span class="number">53</span>,
+        <span class="key">"18-30"</span>: <span class="number">124</span>,
+        <span class="key">"31-50"</span>: <span class="number">97</span>,
+        <span class="key">"51+"</span>: <span class="number">44</span>
+      }
+    }
+  }
+}</pre>
+</div>
+</div>
+
+<div class="endpoint">
+<div class="endpoint-header">
+    <span class="method post">POST</span>
+    <code>/v1/cases/report</code>
+</div>
+<div class="endpoint-content">
+    <p>Reporta um novo caso de malária ao sistema.</p>
+    
+    <h4>Corpo da Requisição (JSON)</h4>
+    <pre>{
+<span class="key">"location"</span>: {
+<span class="key">"latitude"</span>: <span class="number">-3.1150</span>,
+<span class="key">"longitude"</span>: <span class="number">-60.0250</span>,
+<span class="key">"regionId"</span>: <span class="string">"region-456"</span>
+},
+<span class="key">"reportDate"</span>: <span class="string">"2025-04-17T14:30:00Z"</span>,
+<span class="key">"parasiteType"</span>: <span class="string">"P. vivax"</span>,
+<span class="key">"patientData"</span>: {
+<span class="key">"ageGroup"</span>: <span class="string">"31-50"</span>,
+<span class="key">"gender"</span>: <span class="string">"M"</span>
+},
+<span class="key">"status"</span>: <span class="string">"confirmed"</span>
+}</pre>
+    
+    <h4>Parâmetros do Corpo</h4>
+    <table class="parameter-table">
+        <thead>
+            <tr>
+                <th>Parâmetro</th>
+                <th>Tipo</th>
+                <th>Obrigatório</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>location.latitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Latitude do local do caso</td>
+            </tr>
+            <tr>
+                <td>location.longitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Longitude do local do caso</td>
+            </tr>
+            <tr>
+                <td>location.regionId</td>
+                <td>String</td>
+                <td class="optional">Não</td>
+                <td>ID da região, se conhecido</td>
+            </tr>
+            <tr>
+                <td>reportDate</td>
+                <td>String (ISO)</td>
+                <td class="required">Sim</td>
+                <td>Data do reporte (formato: YYYY-MM-DDThh:mm:ssZ)</td>
+            </tr>
+            <tr>
+                <td>parasiteType</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Tipo de parasita: "P. vivax", "P. falciparum", "Mixed", "Unknown"</td>
+            </tr>
+            <tr>
+                <td>patientData.ageGroup</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Faixa etária: "0-5", "6-17", "18-30", "31-50", "51+"</td>
+            </tr>
+            <tr>
+                <td>patientData.gender</td>
+                <td>String</td>
+                <td class="optional">Não</td>
+                <td>Gênero: "M", "F", "Other"</td>
+            </tr>
+            <tr>
+                <td>status</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Status do caso: "confirmed", "suspected"</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4>Exemplo de Resposta</h4>
+    <pre class="response-example"><span class="response-code">// Status: 201 Created</span>
+{
+<span class="key">"status"</span>: <span class="string">"success"</span>,
+<span class="key">"data"</span>: {
+<span class="key">"id"</span>: <span class="string">"case-790"</span>,
+<span class="key">"message"</span>: <span class="string">"Caso reportado com sucesso"</span>,
+<span class="key">"reportedAt"</span>: <span class="string">"2025-04-17T14:32:00Z"</span>
+}
+}</pre>
+</div>
+</div>
+</div>
+
+<div id="previsoes">
+<h3>Previsões</h3>
+
+<div class="endpoint">
+<div class="endpoint-header">
+    <span class="method get">GET</span>
+    <code>/v1/predictions</code>
+</div>
+<div class="endpoint-content">
+    <p>Retorna previsões de surtos de malária com base em modelos de aprendizado de máquina.</p>
+    
+    <h4>Parâmetros de Consulta</h4>
+    <table class="parameter-table">
+        <thead>
+            <tr>
+                <th>Parâmetro</th>
+                <th>Tipo</th>
+                <th>Obrigatório</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>latitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Latitude do ponto central</td>
+            </tr>
+            <tr>
+                <td>longitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Longitude do ponto central</td>
+            </tr>
+            <tr>
+                <td>forecastDays</td>
+                <td>Number</td>
+                <td class="optional">Não</td>
+                <td>Número de dias para previsão (padrão: 7, máximo: 30)</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4>Exemplo de Resposta</h4>
+    <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+<span class="key">"status"</span>: <span class="string">"success"</span>,
+<span class="key">"data"</span>: {
+<span class="key">"location"</span>: {
+<span class="key">"latitude"</span>: <span class="number">-3.1190</span>,
+<span class="key">"longitude"</span>: <span class="number">-60.0217</span>,
+<span class="key">"name"</span>: <span class="string">"Manaus, AM"</span>
+},
+<span class="key">"forecastDays"</span>: <span class="number">7</span>,
+<span class="key">"predictions"</span>: [
+{
+<span class="key">"date"</span>: <span class="string">"2025-04-19"</span>,
+<span class="key">"riskLevel"</span>: <span class="string">"high"</span>,
+<span class="key">"confidence"</span>: <span class="number">0.92</span>,
+<span class="key">"expectedCases"</span>: <span class="number">15</span>
+}
+],
+<span class="key">"modelDetails"</span>: {
+<span class="key">"modelType"</span>: <span class="string">"RandomForest"</span>,
+<span class="key">"lastTrained"</span>: <span class="string">"2025-04-10T08:00:00Z"</span>
+}
+}
+}</pre>
+</div>
+</div>
+</div>
+
+<div id="alertas">
+<h3>Sistema de Alertas</h3>
+
+<div class="endpoint">
+<div class="endpoint-header">
+    <span class="method post">POST</span>
+    <code>/v1/alerts/subscribe</code>
+</div>
+<div class="endpoint-content">
+    <p>Inscreve um usuário para receber alertas de risco de malária em uma área específica.</p>
+    
+    <h4>Corpo da Requisição (JSON)</h4>
+    <pre>{
+<span class="key">"email"</span>: <span class="string">"user@example.com"</span>,
+<span class="key">"location"</span>: {
+<span class="key">"latitude"</span>: <span class="number">-3.1190</span>,
+<span class="key">"longitude"</span>: <span class="number">-60.0217</span>,
+<span class="key">"radius"</span>: <span class="number">10</span>
+},
+<span class="key">"riskThreshold"</span>: <span class="string">"high"</span>,
+<span class="key">"frequency"</span>: <span class="string">"daily"</span>
+}</pre>
+    
+    <h4>Parâmetros do Corpo</h4>
+    <table class="parameter-table">
+        <thead>
+            <tr>
+                <th>Parâmetro</th>
+                <th>Tipo</th>
+                <th>Obrigatório</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>email</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Endereço de e-mail para receber alertas</td>
+            </tr>
+            <tr>
+                <td>location.latitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Latitude do centro da área monitorada</td>
+            </tr>
+            <tr>
+                <td>location.longitude</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Longitude do centro da área monitorada</td>
+            </tr>
+            <tr>
+                <td>location.radius</td>
+                <td>Number</td>
+                <td class="required">Sim</td>
+                <td>Raio da área em quilômetros</td>
+            </tr>
+            <tr>
+                <td>riskThreshold</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Nível de risco para disparar alerta: "low", "medium", "high"</td>
+            </tr>
+            <tr>
+                <td>frequency</td>
+                <td>String</td>
+                <td class="required">Sim</td>
+                <td>Frequência dos alertas: "daily", "weekly"</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4>Exemplo de Resposta</h4>
+    <pre class="response-example"><span class="response-code">// Status: 201 Created</span>
+{
+<span class="key">"status"</span>: <span class="string">"success"</span>,
+<span class="key">"data"</span>: {
+<span class="key">"subscriptionId"</span>: <span class="string">"sub-123"</span>,
+<span class="key">"message"</span>: <span class="string">"Inscrição realizada com sucesso"</span>,
+<span class="key">"createdAt"</span>: <span class="string">"2025-04-18T10:00:00Z"</span>
+}
+}</pre>
+</div>
+</div>
+
+<div class="endpoint">
+<div class="endpoint-header">
+    <span class="method delete">DELETE</span>
+    <code>/v1/alerts/subscribe/{subscriptionId}</code>
+</div>
+<div class="endpoint-content">
+    <p>Cancela uma inscrição de alertas.</p>
+    
+    <h4>Parâmetros de Caminho</h4>
+    <table class="parameter-table">
+        <thead>
+            <tr>
+                <th>Parâmetro</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>subscriptionId</td>
+                <td>String</td>
+                <td>ID único da inscrição a ser cancelada</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h4>Exemplo de Resposta</h4>
+    <pre class="response-example"><span class="response-code">// Status: 200 OK</span>
+{
+<span class="key">"status"</span>: <span class="string">"success"</span>,
+<span class="key">"data"</span>: {
+<span class="key">"message"</span>: <span class="string">"Inscrição cancelada com sucesso"</span>,
+<span class="key">"deletedAt"</span>: <span class="string">"2025-04-18T10:05:00Z"</span>
+}
+}</pre>
+</div>
+</div>
+</div>
+</section>
+
+<section id="codigos">
+<h2>Códigos de Resposta</h2>
+<div class="card">
+<p>A API utiliza códigos de status HTTP padrão para indicar o sucesso ou falha das requisições.</p>
+
+<table class="parameter-table">
+<thead>
+    <tr>
+        <th>Código</th>
+        <th>Descrição</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>200 OK</td>
+        <td>Requisição bem-sucedida</td>
+    </tr>
+    <tr>
+        <td>201 Created</td>
+        <td>Recurso criado com sucesso (usado em POST)</td>
+    </tr>
+    <tr>
+        <td>400 Bad Request</td>
+        <td>Parâmetros inválidos ou ausentes</td>
+    </tr>
+    <tr>
+        <td>401 Unauthorized</td>
+        <td>Chave de API inválida ou ausente</td>
+    </tr>
+    <tr>
+        <td>403 Forbidden</td>
+        <td>Acesso negado ou limite de requisições excedido</td>
+    </tr>
+    <tr>
+        <td>404 Not Found</td>
+        <td>Recurso não encontrado</td>
+    </tr>
+    <tr>
+        <td>500 Internal Server Error</td>
+        <td>Erro interno do servidor</td>
+    </tr>
+</tbody>
+</table>
+
+<h3>Exemplo de Resposta de Erro</h3>
+<pre class="response-example"><span class="response-code">// Status: 400 Bad Request</span>
+{
+<span class="key">"status"</span>: <span class="string">"error"</span>,
+<span class="key">"error"</span>: {
+<span class="key">"code"</span>: <span class="number">400</span>,
+<span class="key">"message"</span>: <span class="string">"Parâmetro 'latitude' é obrigatório"</span>
+}
+}</pre>
+</div>
+</section>
+
+<section id="exemplos">
+<h2>Exemplos</h2>
+<div class="card">
+<h3>Exemplo em Python: Consultar Zonas de Risco</h3>
+<pre>
+import requests
+
+API_KEY = "sua_chave_api_aqui"
+BASE_URL = "https://api.malariarisk.com/v1"
+
+headers = {
+"X-API-Key": API_KEY
+}
+
+params = {
+"latitude": -3.1190,
+"longitude": -60.0217,
+"radius": 10,
+"resolution": "medium"
+}
+
+response = requests.get(f"{BASE_URL}/risk-zones", headers=headers, params=params)
+
+if response.status_code == 200:
+data = response.json()
+print(data)
+else:
+print(f"Erro: {response.status_code} - {response.json()['error']['message']}")
+</pre>
+
+<h3>Exemplo em JavaScript: Reportar um Caso</h3>
+<pre>
+const API_KEY = "sua_chave_api_aqui";
+const BASE_URL = "https://api.malariarisk.com/v1";
+
+const headers = {
+"X-API-Key": API_KEY,
+"Content-Type": "application/json"
+};
+
+const body = {
+location: {
+latitude: -3.1150,
+longitude: -60.0250,
+regionId: "region-456"
+},
+reportDate: "2025-04-17T14:30:00Z",
+parasiteType: "P. vivax",
+patientData: {
+ageGroup: "31-50",
+gender: "M"
+},
+status: "confirmed"
+};
+
+fetch(`${BASE_URL}/cases/report`, {
+method: "POST",
+headers: headers,
+body: JSON.stringify(body)
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error("Erro:", error));
+</pre>
+</div>
+</section>
+</div>
+
+<footer>
+<p>&copy; 2025 MapaZZZ API. Todos os direitos reservados.</p>
+</footer>
+
+
+</body>
+</html>
